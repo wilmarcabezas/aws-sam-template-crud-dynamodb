@@ -1,0 +1,107 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Este Template construye un entorno completo para realizar CRUD sobre DynamoDB'
+#Este ejemplo construye un completo entorno para el CRUD sobre DynamoDB usando funciones Lambda
+  
+Globals:
+  Function:
+    Timeout: 3
+    MemorySize: 128
+    Runtime: nodejs14.x
+
+Resources:
+  TableInfo:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: person
+      AttributeDefinitions: 
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH      
+      BillingMode: PAY_PER_REQUEST
+
+  GetAllInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.GetAllInfo
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy: 
+            TableName: !Ref TableInfo
+      Events:
+        ApiGetAllInfo:
+          Type: Api
+          Properties:
+            Path: /person/
+            Method: GET
+  GetInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.GetInfo
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableInfo
+      Events:
+        ApiCrudGet:
+          Type: Api
+          Properties:
+            Path: /person/{id+}
+            Method: GET
+
+  PutFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.PutInfo
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableInfo
+      Events:
+        ApiCrudPost:
+          Type: Api
+          Properties:
+            Path: /person
+            Method: POST
+  
+  DeleteInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.DeleteInfo
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableInfo
+      Events:
+        ApiCrudDelete:
+          Type: Api
+          Properties:
+            Path: /person/{id+}
+            Method: DELETE
+
+  UpdateInfo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./src
+      Handler: app.UpdateInfo
+      Architectures:
+        - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref TableInfo
+      Events:
+        ApiCrudUpdate:
+          Type: Api
+          Properties:
+            Path: /person/{id+}
+            Method: PUT

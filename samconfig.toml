@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam3"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-wtr4gg28t1oc"
+s3_prefix = "sam3"
+region = "us-west-1"
+capabilities = "CAPABILITY_IAM"
+image_repositories = []

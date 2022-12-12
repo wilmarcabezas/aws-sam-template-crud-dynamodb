@@ -1,0 +1,17 @@
+{
+    "serverlessConsole.services": [
+        {
+            "type": "cloudformation",
+            "title": "Serverless",
+            "timeOffsetInMs": 0,
+            "awsProfile": "default",
+            "stacks": [
+                {
+                    "region": "us-west-1",
+                    "stackName": "sam3",
+                    "stage": "Prod"
+                }
+            ]
+        }
+    ]
+}
